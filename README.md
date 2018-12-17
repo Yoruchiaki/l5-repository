@@ -1,68 +1,60 @@
 # Laravel 5 Repositories
+Laravel 5 Repositories 用于抽象数据层，使我们的应用程序维护更加灵活。
 
-Laravel 5 Repositories is used to abstract the data layer, making our application more flexible to maintain.
+您想要了解关于存储库模式的更多信息吗? [了解更多](http://bit.ly/1IdmRNS).
 
-[![Latest Stable Version](https://poser.pugx.org/prettus/l5-repository/v/stable)](https://packagist.org/packages/prettus/l5-repository) [![Total Downloads](https://poser.pugx.org/prettus/l5-repository/downloads)](https://packagist.org/packages/prettus/l5-repository) [![Latest Unstable Version](https://poser.pugx.org/prettus/l5-repository/v/unstable)](https://packagist.org/packages/prettus/l5-repository) [![License](https://poser.pugx.org/prettus/l5-repository/license)](https://packagist.org/packages/prettus/l5-repository)
-[![Analytics](https://ga-beacon.appspot.com/UA-61050740-1/l5-repository/readme)](https://packagist.org/packages/prettus/l5-repository)
-[![Code Climate](https://codeclimate.com/github/andersao/l5-repository/badges/gpa.svg)](https://codeclimate.com/github/andersao/l5-repository)
+## 目录
 
-#### See versions: [1.0.*](https://github.com/andersao/l5-repository/tree/1.0.4) / [2.0.*](https://github.com/andersao/l5-repository/tree/2.0.14)
-#### Migrate to: [2.0](migration-to-2.0.md) / [2.1](migration-to-2.1.md)
-
-You want to know a little more about the Repository pattern? [Read this great article](http://bit.ly/1IdmRNS).
-
-## Table of Contents
-
-- <a href="#installation">Installation</a>
+- <a href="#installation">安装</a>
     - <a href="#composer">Composer</a>
     - <a href="#laravel">Laravel</a>
-- <a href="#methods">Methods</a>
-    - <a href="#prettusrepositorycontractsrepositoryinterface">RepositoryInterface</a>
-    - <a href="#prettusrepositorycontractsrepositorycriteriainterface">RepositoryCriteriaInterface</a>
-    - <a href="#prettusrepositorycontractscacheableinterface">CacheableInterface</a>
-    - <a href="#prettusrepositorycontractspresenterinterface">PresenterInterface</a>
-    - <a href="#prettusrepositorycontractscriteriainterface">CriteriaInterface</a>
-- <a href="#usage">Usage</a>
-	- <a href="#create-a-model">Create a Model</a>
-	- <a href="#create-a-repository">Create a Repository</a>
-	- <a href="#generators">Generators</a>
-	- <a href="#use-methods">Use methods</a>
-	- <a href="#create-a-criteria">Create a Criteria</a>
-	- <a href="#using-the-criteria-in-a-controller">Using the Criteria in a Controller</a>
-	- <a href="#using-the-requestcriteria">Using the RequestCriteria</a>
-- <a href="#cache">Cache</a>
-    - <a href="#cache-usage">Usage</a>
-    - <a href="#cache-config">Config</a>
-- <a href="#validators">Validators</a>
-    - <a href="#using-a-validator-class">Using a Validator Class</a>
-        - <a href="#create-a-validator">Create a Validator</a>
-        - <a href="#enabling-validator-in-your-repository-1">Enabling Validator in your Repository</a>
-    - <a href="#defining-rules-in-the-repository">Defining rules in the repository</a>
-- <a href="#presenters">Presenters</a>
-    - <a href="#fractal-presenter">Fractal Presenter</a>
-        - <a href="#create-a-presenter">Create a Fractal Presenter</a>
-        - <a href="#implement-interface">Model Transformable</a>
-    - <a href="#enabling-in-your-repository-1">Enabling in your Repository</a>
+- <a href="#methods">方法</a>
+    - <a href="#prettusrepositorycontractsrepositoryinterface">储存库借口</a>
+    - <a href="#prettusrepositorycontractsrepositorycriteriainterface">储存库标准接口</a>
+    - <a href="#prettusrepositorycontractscacheableinterface">缓存接口</a>
+    - <a href="#prettusrepositorycontractspresenterinterface">主持人接口</a>
+    - <a href="#prettusrepositorycontractscriteriainterface">标准接口</a>
+- <a href="#usage">使用方法</a>
+	- <a href="#create-a-model">创建 Model</a>
+	- <a href="#create-a-repository">创建 Repository</a>
+	- <a href="#generators">生成器</a>
+	- <a href="#use-methods">使用方法</a>
+	- <a href="#create-a-criteria">创建 Criteria</a>
+	- <a href="#using-the-criteria-in-a-controller">在 Controller 中使用Criteria</a>
+	- <a href="#using-the-requestcriteria">使用 RequestCriteria</a>
+- <a href="#cache">缓存</a>
+    - <a href="#cache-usage">使用方法</a>
+    - <a href="#cache-config">配置</a>
+- <a href="#validators">验证器</a>
+    - <a href="#using-a-validator-class">使用 Validator 类</a>
+        - <a href="#create-a-validator">创建 Validator</a>
+        - <a href="#enabling-validator-in-your-repository-1">在 Repository 中开启 Validator</a>
+    - <a href="#defining-rules-in-the-repository">在 Repository 中定义规则</a>
+- <a href="#presenters">主持人</a>
+    - <a href="#fractal-presenter">分形 Presenter</a>
+        - <a href="#create-a-presenter">创建分形 Presenter</a>
+        - <a href="#implement-interface">Model转化</a>
+    - <a href="#enabling-in-your-repository-1">在 Repository 启用</a>
 
-## Installation
+## 安装
 
 ### Composer
 
-Execute the following command to get the latest version of the package:
+你可以执行下面的命令获得最新的安装包:
 
 ```terminal
-composer require prettus/l5-repository
+composer require yoruchiaki/l5-repository
 ```
 
 ### Laravel
 
 #### >= laravel5.5
 
-ServiceProvider will be attached automatically
+ServiceProvider将会自动加载
 
-#### Other
+#### 其他版本
 
-In your `config/app.php` add `Prettus\Repository\Providers\RepositoryServiceProvider::class` to the end of the `providers` array:
+在你的`config/app.php`文件中`providers`节点添加`Prettus\Repository\Providers\RepositoryServiceProvider::class`到最后
 
 ```php
 'providers' => [
@@ -71,36 +63,30 @@ In your `config/app.php` add `Prettus\Repository\Providers\RepositoryServiceProv
 ],
 ```
 
-If Lumen
-
-```php
-$app->register(Prettus\Repository\Providers\LumenRepositoryServiceProvider::class);
-```
-
-Publish Configuration
+发布配置文件
 
 ```shell
 php artisan vendor:publish --provider "Prettus\Repository\Providers\RepositoryServiceProvider"
 ```
 
-## Methods
+## 方法
 
 ### Prettus\Repository\Contracts\RepositoryInterface
 
-- all($columns = array('*'))
-- first($columns = array('*'))
-- paginate($limit = null, $columns = ['*'])
-- find($id, $columns = ['*'])
-- findByField($field, $value, $columns = ['*'])
-- findWhere(array $where, $columns = ['*'])
-- findWhereIn($field, array $where, $columns = [*])
-- findWhereNotIn($field, array $where, $columns = [*])
-- create(array $attributes)
-- update(array $attributes, $id)
-- updateOrCreate(array $attributes, array $values = [])
-- delete($id)
-- deleteWhere(array $where)
-- orderBy($column, $direction = 'asc');
+- all($columns = array('*')) 查询全部
+- first($columns = array('*')) 返回首条数据
+- paginate($limit = null, $columns = ['*']) 返回分页后的数据
+- find($id, $columns = ['*']) 查找指定ID数据
+- findByField($field, $value, $columns = ['*']) 根据field条件查找数据
+- findWhere(array $where, $columns = ['*']) 根据$where条件查找数据
+- findWhereIn($field, array $where, $columns = [*]) 根据$where条件查询IN条件数据
+- findWhereNotIn($field, array $where, $columns = [*])根据$where条件查询NOT IN条件数据
+- create(array $attributes) 根据$attributes创建数据
+- update(array $attributes, $id) 根据$attributes更新$id的数据
+- updateOrCreate(array $attributes, array $values = [])根据$attributes更新$id或创建数据
+- delete($id) 删除指定$id的数据
+- deleteWhere(array $where) 删除符合$where条件的数据
+- orderBy($column, $direction = 'asc'); 根据$column字段排序,默认为asc
 - with(array $relations);
 - has(string $relation);
 - whereHas(string $relation, closure $closure);
