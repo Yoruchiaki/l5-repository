@@ -1,4 +1,5 @@
 <?php
+
 namespace Prettus\Repository\Eloquent;
 
 use Closure;
@@ -558,9 +559,9 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
             // we should pass data that has been casts by the model
             // to make sure data type are same because validator may need to use
             // this data to compare with data that fetch from database.
-            if( $this->versionCompare($this->app->version(), "5.2.*", ">") ){
+            if ($this->versionCompare($this->app->version(), "5.2.*", ">")) {
                 $attributes = $this->model->newInstance()->forceFill($attributes)->makeVisible($this->model->getHidden())->toArray();
-            }else{
+            } else {
                 $model = $this->model->newInstance()->forceFill($attributes);
                 $model->addVisible($this->model->getHidden());
                 $attributes = $model->toArray();
@@ -596,9 +597,9 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
             // we should pass data that has been casts by the model
             // to make sure data type are same because validator may need to use
             // this data to compare with data that fetch from database.
-            if( $this->versionCompare($this->app->version(), "5.2.*", ">") ){
+            if ($this->versionCompare($this->app->version(), "5.2.*", ">")) {
                 $attributes = $this->model->newInstance()->forceFill($attributes)->makeVisible($this->model->getHidden())->toArray();
-            }else{
+            } else {
                 $model = $this->model->newInstance()->forceFill($attributes);
                 $model->addVisible($this->model->getHidden());
                 $attributes = $model->toArray();
@@ -719,6 +720,16 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     {
         $this->model = $this->model->has($relation);
 
+        return $this;
+    }
+
+    /**
+     * @param $limit
+     * @return $this
+     */
+    public function limit($limit)
+    {
+        $this->model = $this->model->limit($limit);
         return $this;
     }
 
